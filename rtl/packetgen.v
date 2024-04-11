@@ -33,7 +33,7 @@ module packetgen #(
 
 		//Flow characteristics
 		parameter [32*N_FLOWS-1:0] BANDWIDTHS = {32'd1000000000, 32'd1000000000, 32'd1000000000, 32'd1000000000},
-		parameter [10*N_FLOWS-1:0] SIZES = {10'd192, 10'd192, 10'd192, 10'd192},
+		parameter [11*N_FLOWS-1:0] SIZES = {10'd192, 10'd192, 10'd192, 10'd192},
 
 		//Packet contents
 		parameter [48*N_FLOWS-1:0] D_MACS = {48'hABCDEF000001, 48'hABCDEF000002, 48'hABCDEF000003, 48'hABCDEF000004},
@@ -54,7 +54,7 @@ module packetgen #(
 	);
 
 	//Debug purposes
-	reg [10*N_FLOWS-1:0] sizes_reg = SIZES;
+	reg [11*N_FLOWS-1:0] sizes_reg = SIZES;
 	reg [32*N_FLOWS-1:0] bandwidths_reg = BANDWIDTHS;
 
 	reg [48*N_FLOWS-1:0] d_macs_reg = D_MACS;
@@ -142,7 +142,7 @@ module packetgen #(
 				.ID(i),
 				.FREQUENCY(FREQUENCY),
 
-				.SIZE(SIZES[10*(i+1)-1:10*i]),
+				.SIZE(SIZES[11*(i+1)-1:11*i]),
 				.BANDWIDTH(BANDWIDTHS[32*(i+1)-1:32*i]),
 
 				.MAC_D(D_MACS[48*(i+1)-1:48*i]),
