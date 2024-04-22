@@ -29,7 +29,7 @@ SOFTWARE.
 module packet_manager #(
         //Flow characteristics
         parameter ID = 0,
-        parameter SIZE=30,
+        parameter SIZE=64,
         parameter FREQUENCY = 350000000,
 		parameter BANDWIDTH = 1000000000,
 
@@ -95,7 +95,6 @@ module packet_manager #(
     ) counter (
         .clk(clk),
         .rst(rst),
-        .input_sig(clk),
         .output_sig(counter_out)
     );
 

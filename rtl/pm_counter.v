@@ -28,7 +28,7 @@ SOFTWARE.
 
 module pm_counter #(
     // Flow characteristics
-    parameter SIZE=30,
+    parameter SIZE=64,
     parameter FREQUENCY = 350000000,
 	parameter BANDWIDTH = 1000000000,
     //Precision
@@ -36,7 +36,6 @@ module pm_counter #(
     )(
     input wire clk,
     input wire rst,
-    input wire input_sig,
     output reg output_sig
 );  
 
@@ -77,7 +76,7 @@ module pm_counter #(
             end else begin
                 packet_count <= packet_count + 1;
             end
-        end else if (input_sig) begin
+        end else begin
             cycle_count <= cycle_count + 1;
             output_sig <= 0;
         end
