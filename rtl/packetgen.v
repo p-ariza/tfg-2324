@@ -169,4 +169,4 @@ module packetgen #(
 		end
 	endgenerate
 
-endmodule :packetgen
+endmodule

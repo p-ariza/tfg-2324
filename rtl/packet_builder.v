@@ -250,4 +250,4 @@ module packet_builder #(
 		end
     end
 
-endmodule :packet_builder
+endmodule

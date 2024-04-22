@@ -84,4 +84,4 @@ module pm_counter #(
             output_sig_reg <= 0;
         end
     end
-endmodule :pm_counter
+endmodule

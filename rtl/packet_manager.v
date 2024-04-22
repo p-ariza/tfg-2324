@@ -143,4 +143,4 @@ module packet_manager #(
     end
     
 
-endmodule :packet_manager
+endmodule
