@@ -47,10 +47,10 @@ module packetgen #(
 		input wire rst,
 		//AXI Stream
 		//input  wire						axis_tready,
-		output wire 					axis_tvalid,
-		output wire 					axis_tlast,
+		output wire [DATA_WIDTH-1:0]	axis_tdata,
 		output wire [DATA_WIDTH/8-1:0]	axis_tkeep,
-		output wire [DATA_WIDTH-1:0]	axis_tdata
+		output wire 					axis_tvalid,
+		output wire 					axis_tlast
 	);
 
 	//Debug purposes

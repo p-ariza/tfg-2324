@@ -45,14 +45,23 @@ module packet_builder #(
         input wire [7 :0]   payload,
 
 		//AXI Stream
-		output reg 						axis_tvalid,
-		output reg 						axis_tlast,
-		output reg [DATA_WIDTH/8-1:0]	axis_tkeep,
-		output reg [DATA_WIDTH-1:0]		axis_tdata
+		output wire [DATA_WIDTH-1:0]		axis_tdata,
+		output wire [DATA_WIDTH/8-1:0]		axis_tkeep,
+		output wire 						axis_tvalid,
+		output wire 						axis_tlast
 	);
 
 	localparam N_BYTES = DATA_WIDTH/8;
 	integer i;
+
+	reg [DATA_WIDTH-1:0]		axis_tdata_reg;
+	reg [DATA_WIDTH/8-1:0]		axis_tkeep_reg;
+	reg 						axis_tvalid_reg;
+	reg 						axis_tlast_reg;
+	assign axis_tdata  = axis_tdata_reg;
+	assign axis_tkeep  = axis_tkeep_reg;
+	assign axis_tvalid = axis_tvalid_reg;
+	assign axis_tlast  = axis_tlast_reg;
 
 	//FIFO
 	reg fifo_rd_enable_reg;
@@ -108,11 +117,12 @@ module packet_builder #(
 		case (state)
 			IDLE: begin
 				//Not sending data
-				axis_tdata  <= 0;
-				axis_tvalid <= 0;
-				axis_tkeep  <= 0;
+				axis_tdata_reg  <= 0;
+				axis_tkeep_reg  <= 0;
+				axis_tvalid_reg <= 0;
+				axis_tlast_reg  <= 0;
+
 				byte_count  <= 0;
-				axis_tlast  <= 0;
 
 				if(fifo_rd_valid) begin
 					//Save command arguments
@@ -125,13 +135,13 @@ module packet_builder #(
 			end
 			SEND_START: begin
 				//Start with Header
-				axis_tdata[47:0  ] <= dest_mac;
-				axis_tdata[95:48 ] <= sour_mac;
-				axis_tdata[111:96] <= etype;
-				axis_tdata[DATA_WIDTH-1:112] <= {(N_BYTES-14){filler}};
+				axis_tdata_reg[47:0  ] <= dest_mac;
+				axis_tdata_reg[95:48 ] <= sour_mac;
+				axis_tdata_reg[111:96] <= etype;
+				axis_tdata_reg[DATA_WIDTH-1:112] <= {(N_BYTES-14){filler}};
 
-				axis_tkeep  <= ~0;
-				axis_tvalid <= 1;
+				axis_tkeep_reg  <= ~0;
+				axis_tvalid_reg <= 1;
 				
 
 				if(N_BYTES >= packet_size) begin
@@ -144,36 +154,36 @@ module packet_builder #(
 						etype <= ethertype;
 						filler <= payload;
 					end 
+					axis_tlast_reg  <= 1;
 					byte_count <= 0;
-					axis_tlast  <= 1;
 				end else begin
+					axis_tlast_reg  <= 0;
 					byte_count <= byte_count + N_BYTES;
-					axis_tlast  <= 0;
 				end
 			end
 			SEND: begin
 				//Send full transfer
-				axis_tdata  <= {N_BYTES{filler}};
-				axis_tkeep  <= ~0;
-				axis_tvalid <= 1;
-				axis_tlast  <= 0;
+				axis_tdata_reg  <= {N_BYTES{filler}};
+				axis_tkeep_reg  <= ~0;
+				axis_tvalid_reg <= 1;
+				axis_tlast_reg  <= 0;
 
 				byte_count <= byte_count + N_BYTES;
 			end
 			SEND_LAST: begin
 				//Last transfer could be incomplete
-				axis_tdata <= {N_BYTES{filler}};
+				axis_tdata_reg <= {N_BYTES{filler}};
 
 				//Update tkeep accordingly
 				for(i = 0; i < N_BYTES; i = i + 1) begin
 					if(packet_size - byte_count >= i+1) begin
-						axis_tkeep[i] <= 1;
+						axis_tkeep_reg[i] <= 1;
 					end else begin
-						axis_tkeep[i] <= 0;
+						axis_tkeep_reg[i] <= 0;
 					end
 				end
-				axis_tvalid <= 1;
-				axis_tlast  <= 1;
+				axis_tvalid_reg <= 1;
+				axis_tlast_reg  <= 1;
 
 				byte_count <= 0;
 

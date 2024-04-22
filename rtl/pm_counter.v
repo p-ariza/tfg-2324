@@ -36,7 +36,7 @@ module pm_counter #(
     )(
     input wire clk,
     input wire rst,
-    output reg output_sig
+    output wire output_sig
 );  
 
     //Calculate N_CYCLES from desired BANDWIDTH
@@ -53,16 +53,19 @@ module pm_counter #(
 
     reg [CYCLE_COUNT_WIDTH-1:0] cycle_count;
     reg [PACKET_COUNT_WIDTH-1:0] packet_count;
+
+    reg output_sig_reg;
+    assign output_sig = output_sig_reg;
     
     //Rising Edge
     always @(posedge clk or posedge rst) begin
         if (rst) begin
             cycle_count <= 0;
-            output_sig <= 1;
+            output_sig_reg <= 1;
             packet_count <= 0;
         end else if ((cycle_count == N_CYCLES) && packet_count < NCYCLES_REMAINDER) begin
             cycle_count <= 0;
-            output_sig <= 1;
+            output_sig_reg <= 1;
             if (packet_count < INTEGRATION_CYCLE) begin
                 packet_count <= packet_count + 1;
             end else begin
@@ -70,7 +73,7 @@ module pm_counter #(
             end
         end else if ((cycle_count == N_CYCLES-1) && packet_count >= NCYCLES_REMAINDER) begin
             cycle_count <= 0;
-            output_sig <= 1;
+            output_sig_reg <= 1;
             if (packet_count == INTEGRATION_CYCLE-1) begin
                 packet_count <= 0;
             end else begin
@@ -78,7 +81,7 @@ module pm_counter #(
             end
         end else begin
             cycle_count <= cycle_count + 1;
-            output_sig <= 0;
+            output_sig_reg <= 0;
         end
     end
 endmodule :pm_counter
