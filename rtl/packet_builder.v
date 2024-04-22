@@ -27,7 +27,7 @@ SOFTWARE.
 `default_nettype none
 
 module packet_builder #(
-		parameter DATA_WIDTH=64
+		parameter DATA_WIDTH=512
 	)
 	(
 		input wire clk,
