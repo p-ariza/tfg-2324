@@ -90,32 +90,8 @@ module packetgen #(
 
 	//Managers - FIFO Interface
 	wire [130:0] fifo_wr_data;
-	wire fifo_wr_enable;
+	wire [N_FLOWS-1:0] manager_wr_enable;
 	wire fifo_wr_ready;
-
-	switch_simple_fifo #(
-		.DEPTH(8),
-		.DATA_WIDTH(131)
-	) command_fifo (
-		.clk(clk),
-		.rst(rst),
-
-		.wr_data(fifo_wr_data),
-		.wr_enable(fifo_wr_enable),
-		.wr_ready(fifo_wr_ready),
-
-		.wr_sof(1'b0),
-		.wr_eof(1'b0),
-		.wr_drop(1'b0),
-
-		.rd_data(fifo_rd_data),
-		.rd_enable(fifo_rd_enable),
-		.rd_valid(fifo_rd_valid),
-
-		.rd_sof(1'b0),
-		.rd_eof(1'b0),
-		.rd_drop(1'b0)
-	);
 	
 	//Arbiter Interface
 	wire [N_FLOWS-1:0] manager_request;
@@ -135,6 +111,8 @@ module packetgen #(
 		.grant(manager_grant)
 	);
 
+
+	wire [N_FLOWS*131-1:0] manager_data;
 	genvar i;
 	generate
 		for (i=0; i < N_FLOWS; i = i+1) begin
@@ -157,16 +135,58 @@ module packetgen #(
 				.arb_ack(manager_ack[i]),
 				.arb_grant(manager_grant[i]),
 
-				.fifo_wr_enable(fifo_wr_enable),
+				.fifo_wr_enable(manager_wr_enable[i]),
 				.fifo_wr_ready(fifo_wr_ready),
 
-				.size			(fifo_wr_data[130:120]),
-				.d_mac			(fifo_wr_data[119:72]),
-				.s_mac			(fifo_wr_data[71:24]),
-				.ethertype		(fifo_wr_data[23:8]),
-				.payload		(fifo_wr_data[7:0])
+				.size			(manager_data[(i*131+130):(i*131+120)]),
+				.d_mac			(manager_data[(i*131+119):(i*131+72)]),
+				.s_mac			(manager_data[(i*131+71) :(i*131+24)]),
+				.ethertype		(manager_data[(i*131+23) :(i*131+8)]),
+				.payload		(manager_data[(i*131+7)  :(i*131)])
 			);
 		end
 	endgenerate
+
+	reg [N_FLOWS-1:0] manager_wr_enable_reg = {N_FLOWS{1'b0}};
+	reg [131-1:0] manager_data_reg;
+
+	integer j;
+	always @(posedge clk) begin
+		if (rst) begin
+			manager_wr_enable_reg <= {N_FLOWS{1'b0}};
+		end
+
+		manager_wr_enable_reg <= manager_wr_enable;
+
+		for (j=0; j < N_FLOWS; j = j+1) begin
+			if(manager_wr_enable[j]) begin
+				manager_data_reg[131:0] <= manager_data[j*131 +: 131];
+			end
+		end
+	end
+
+	switch_simple_fifo #(
+		.DEPTH(8),
+		.DATA_WIDTH(131)
+	) command_fifo (
+		.clk(clk),
+		.rst(rst),
+
+		.wr_data(manager_data_reg),
+		.wr_enable(|manager_wr_enable_reg),
+		.wr_ready(fifo_wr_ready),
+
+		.wr_sof(1'b0),
+		.wr_eof(1'b0),
+		.wr_drop(1'b0),
+
+		.rd_data(fifo_rd_data),
+		.rd_enable(fifo_rd_enable),
+		.rd_valid(fifo_rd_valid),
+
+		.rd_sof(1'b0),
+		.rd_eof(1'b0),
+		.rd_drop(1'b0)
+	);
 
 endmodule

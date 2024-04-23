@@ -65,10 +65,11 @@ module packet_manager #(
 	localparam [47:0] EC_MAC_D = {MAC_D[7:0], MAC_D[15:8], MAC_D[23:16], MAC_D[31:24], MAC_D[39:32], MAC_D[47:40]};
 	localparam [47:0] EC_MAC_S = {MAC_S[7:0], MAC_S[15:8], MAC_S[23:16], MAC_S[31:24], MAC_S[39:32], MAC_S[47:40]};
 
-    reg [10:0]	size_reg;
-    reg [47:0]	d_mac_reg, s_mac_reg;
-    reg [15:0]  ethertype_reg;
-    reg [7 :0]  payload_reg;
+    reg [10:0]	size_reg        = SIZE;
+    reg [47:0]	d_mac_reg       = EC_MAC_D;
+    reg [47:0]  s_mac_reg       = EC_MAC_S;
+    reg [15:0]  ethertype_reg   = EC_ETHERTYPE;
+    reg [7 :0]  payload_reg     = PAYLOAD;
 
     reg request_reg;
     reg ack_reg;
@@ -113,31 +114,13 @@ module packet_manager #(
 
     always @(posedge clk) begin
         if (rst) begin
-            fifo_wr_enable_reg <= 1'bz;
-
-            size_reg        <= 11'bz;
-            payload_reg     <= 8'bz;
-            d_mac_reg       <= 48'bz;
-            s_mac_reg       <= 48'bz;
-            ethertype_reg   <= 16'bz;
+            fifo_wr_enable_reg <= 0;
         end else begin
             if (arb_grant && fifo_wr_ready) begin
                 //Permission is granted and FIFO is ready
                 fifo_wr_enable_reg <= 1;
-
-                size_reg        <= SIZE;
-                payload_reg     <= PAYLOAD;
-                d_mac_reg       <= EC_MAC_D;
-                s_mac_reg       <= EC_MAC_S;
-                ethertype_reg   <= EC_ETHERTYPE;
             end else begin
-                fifo_wr_enable_reg <= 1'bz;
-                
-                size_reg        <= 11'bz;
-                payload_reg     <= 8'bz;
-                d_mac_reg       <= 48'bz;
-                s_mac_reg       <= 48'bz;
-                ethertype_reg   <= 16'bz;
+                fifo_wr_enable_reg <= 0;
             end
         end
     end
