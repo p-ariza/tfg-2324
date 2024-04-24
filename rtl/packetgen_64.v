@@ -39,7 +39,10 @@ module packetgen_64 #(
     parameter D_MACS = {48'hABCDEF000001, 48'hABCDEF000002, 48'hABCDEF000003, 48'hABCDEF000004},
     parameter S_MACS = {48'hBEEFBEEF0001, 48'hBEEFBEEF0002, 48'hBEEFBEEF0003, 48'hBEEFBEEF0004},
     parameter ETHERTYPES = {16'h0800, 16'h0800, 16'h0800, 16'h0800}, 
-    parameter PAYLOADS = {8'hAA, 8'hBB, 8'hCC, 8'hDD}
+    parameter PAYLOADS = {8'hAA, 8'hBB, 8'hCC, 8'hDD},
+
+    //FIFO depth
+    parameter DEPTH = 4096
 )
 (
     input wire clk,
@@ -70,15 +73,12 @@ module packetgen_64 #(
         .PAYLOADS(PAYLOADS)
     ) generator (
         .clk(clk),
-        .rst(rst),
-        .axis_tdata(pg_axis_tdata),
-        .axis_tkeep(pg_axis_tkeep),
-        .axis_tvalid(pg_axis_tvalid),
+        .rst(rst),is_tready,xis_tvalid),
         .axis_tlast(pg_axis_tlast)
     );
 
     axis_fifo_adapter #(
-        .DEPTH(4096),
+        .DEPTH(DEPTH),
         .S_DATA_WIDTH(DATA_WIDTH),
         .S_KEEP_WIDTH((DATA_WIDTH+7)/8),
 
