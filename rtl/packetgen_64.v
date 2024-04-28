@@ -73,7 +73,10 @@ module packetgen_64 #(
         .PAYLOADS(PAYLOADS)
     ) generator (
         .clk(clk),
-        .rst(rst),is_tready,xis_tvalid),
+        .rst(rst),
+        .axis_tdata(pg_axis_tdata),
+        .axis_tkeep(pg_axis_tkeep),
+        .axis_tvalid(pg_axis_tvalid),
         .axis_tlast(pg_axis_tlast)
     );
 
@@ -83,7 +86,7 @@ module packetgen_64 #(
         .S_KEEP_WIDTH((DATA_WIDTH+7)/8),
 
         .M_DATA_WIDTH(64),
-        .S_KEEP_WIDTH((DATA_WIDTH+7)/8),
+        .M_KEEP_WIDTH(64/8),
 
         .FRAME_FIFO(0)
     ) adapter (
