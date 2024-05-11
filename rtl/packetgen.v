@@ -160,7 +160,7 @@ module packetgen #(
 
 		for (j=0; j < N_FLOWS; j = j+1) begin
 			if(manager_wr_enable[j]) begin
-				manager_data_reg[131:0] <= manager_data[j*131 +: 131];
+				manager_data_reg[131-1:0] <= manager_data[j*131 +: 131];
 			end
 		end
 	end
