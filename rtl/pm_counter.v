@@ -28,9 +28,10 @@ SOFTWARE.
 
 module pm_counter #(
     // Flow characteristics
+    // Units: Bytes, KHz & Kb/s
     parameter SIZE=64,
-    parameter FREQUENCY = 350000000,
-	parameter BANDWIDTH = 1000000000,
+    parameter FREQUENCY = 350000,
+	parameter BANDWIDTH = 1000000,
     //Precision
     parameter INTEGRATION_CYCLE=10
     )(
