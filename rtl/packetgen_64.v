@@ -53,7 +53,7 @@ module packetgen_64 #(
     output wire [7:0]	axis_tkeep,
     output wire 		axis_tvalid,
     //input  wire		  axis_tready,
-    output wire 		axis_tlast
+    output wire 		axis_tlast,
 
     /*
     * Flow Configuration AXI lite slave interface
