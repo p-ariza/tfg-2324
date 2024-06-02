@@ -45,12 +45,38 @@ module packetgen #(
 	(
 		input wire clk,
 		input wire rst,
-		//AXI Stream
+
+		/*
+		* AXI Stream Output
+		*/
 		//input  wire						axis_tready,
 		output wire [DATA_WIDTH-1:0]	axis_tdata,
 		output wire [DATA_WIDTH/8-1:0]	axis_tkeep,
 		output wire 					axis_tvalid,
-		output wire 					axis_tlast
+		output wire 					axis_tlast,
+
+		/*
+		* Flow Configuration AXI lite slave interface
+		*/
+		input  wire [32-1:0]    s_axil_awaddr,
+		input  wire [2:0]       s_axil_awprot,
+		input  wire             s_axil_awvalid,
+		output wire             s_axil_awready,
+		input  wire [32-1:0]    s_axil_wdata,
+		input  wire [4-1:0]     s_axil_wstrb,
+		input  wire             s_axil_wvalid,
+		output wire             s_axil_wready,
+		output wire [1:0]       s_axil_bresp,
+		output wire             s_axil_bvalid,
+		input  wire             s_axil_bready,
+		input  wire [32-1:0]    s_axil_araddr,
+		input  wire [2:0]       s_axil_arprot,
+		input  wire             s_axil_arvalid,
+		output wire             s_axil_arready,
+		output wire [32-1:0]    s_axil_rdata,
+		output wire [1:0]       s_axil_rresp,
+		output wire             s_axil_rvalid,
+		input  wire             s_axil_rready
 	);
 
 	//Debug purposes
@@ -110,7 +136,49 @@ module packetgen #(
 		.acknowledge(manager_ack),
 		.grant(manager_grant)
 	);
+	
+	//Manager configuration interface
+	localparam integer FLOW_WIDTH = (N_FLOWS > 1) ? $clog2(N_FLOWS) : 1;
+	wire                  cfg_en;
+    wire [FLOW_WIDTH-1:0] cfg_id;
+	wire [47:0]           cfg_d_mac;
+    wire [47:0]           cfg_s_mac;
+    wire [15:0]           cfg_ethertype;
+    wire [7 :0]           cfg_payload;
 
+	conf_iface #(
+		.N_FLOWS(N_FLOWS)
+	) manager_config (
+		.clk(clk),
+		.rst(rst),
+
+		.s_axil_awaddr(s_axil_awaddr),
+		.s_axil_awprot(s_axil_awprot),
+		.s_axil_awvalid(s_axil_awvalid),
+		.s_axil_awready(s_axil_awready),
+		.s_axil_wdata(s_axil_wdata),
+		.s_axil_wstrb(s_axil_wstrb),
+		.s_axil_wvalid(s_axil_wvalid),
+		.s_axil_wready(s_axil_wready),
+		.s_axil_bresp(s_axil_bresp),
+		.s_axil_bvalid(s_axil_bvalid),
+		.s_axil_bready(s_axil_bready),
+		.s_axil_araddr(s_axil_araddr),
+		.s_axil_arprot(s_axil_arprot),
+		.s_axil_arvalid(s_axil_arvalid),
+		.s_axil_arready(s_axil_arready),
+		.s_axil_rdata(s_axil_rdata),
+		.s_axil_rresp(s_axil_rresp),
+		.s_axil_rvalid(s_axil_rvalid),
+		.s_axil_rready(s_axil_rready),
+
+		.cfg_en(cfg_en),
+		.cfg_id(cfg_id),
+		.cfg_d_mac(cfg_d_mac),
+		.cfg_s_mac(cfg_s_mac),
+		.cfg_ethertype(cfg_ethertype),
+		.cfg_payload(cfg_payload)
+	);
 
 	wire [N_FLOWS*131-1:0] manager_data;
 	genvar i;
@@ -119,6 +187,7 @@ module packetgen #(
 			packet_manager #(
 				.ID(i),
 				.FREQUENCY(FREQUENCY),
+				.N_FLOWS(N_FLOWS),
 
 				.SIZE(SIZES[11*(i+1)-1:11*i]),
 				.BANDWIDTH(BANDWIDTHS[32*(i+1)-1:32*i]),
@@ -142,7 +211,14 @@ module packetgen #(
 				.d_mac			(manager_data[(i*131+119):(i*131+72)]),
 				.s_mac			(manager_data[(i*131+71) :(i*131+24)]),
 				.ethertype		(manager_data[(i*131+23) :(i*131+8)]),
-				.payload		(manager_data[(i*131+7)  :(i*131)])
+				.payload		(manager_data[(i*131+7)  :(i*131)]),
+
+				.cfg_en(cfg_en),
+				.cfg_id(cfg_id),
+				.cfg_d_mac(cfg_d_mac),
+				.cfg_s_mac(cfg_s_mac),
+				.cfg_ethertype(cfg_ethertype),
+				.cfg_payload(cfg_payload)
 			);
 		end
 	endgenerate

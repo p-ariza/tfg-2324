@@ -48,11 +48,35 @@ module packetgen_64 #(
     input wire clk,
     input wire rst,
     //AXI Stream
-    //input  wire						axis_tready,
+    
     output wire [63:0]	axis_tdata,
     output wire [7:0]	axis_tkeep,
     output wire 		axis_tvalid,
+    //input  wire		  axis_tready,
     output wire 		axis_tlast
+
+    /*
+    * Flow Configuration AXI lite slave interface
+    */
+    input  wire [32-1:0]    s_axil_awaddr,
+    input  wire [2:0]       s_axil_awprot,
+    input  wire             s_axil_awvalid,
+    output wire             s_axil_awready,
+    input  wire [32-1:0]    s_axil_wdata,
+    input  wire [4-1:0]     s_axil_wstrb,
+    input  wire             s_axil_wvalid,
+    output wire             s_axil_wready,
+    output wire [1:0]       s_axil_bresp,
+    output wire             s_axil_bvalid,
+    input  wire             s_axil_bready,
+    input  wire [32-1:0]    s_axil_araddr,
+    input  wire [2:0]       s_axil_arprot,
+    input  wire             s_axil_arvalid,
+    output wire             s_axil_arready,
+    output wire [32-1:0]    s_axil_rdata,
+    output wire [1:0]       s_axil_rresp,
+    output wire             s_axil_rvalid,
+    input  wire             s_axil_rready
 );
 
     wire [DATA_WIDTH-1:0]   pg_axis_tdata;
@@ -74,10 +98,31 @@ module packetgen_64 #(
     ) generator (
         .clk(clk),
         .rst(rst),
+
         .axis_tdata(pg_axis_tdata),
         .axis_tkeep(pg_axis_tkeep),
         .axis_tvalid(pg_axis_tvalid),
-        .axis_tlast(pg_axis_tlast)
+        .axis_tlast(pg_axis_tlast),
+
+        .s_axil_awaddr(s_axil_awaddr),
+		.s_axil_awprot(s_axil_awprot),
+		.s_axil_awvalid(s_axil_awvalid),
+		.s_axil_awready(s_axil_awready),
+		.s_axil_wdata(s_axil_wdata),
+		.s_axil_wstrb(s_axil_wstrb),
+		.s_axil_wvalid(s_axil_wvalid),
+		.s_axil_wready(s_axil_wready),
+		.s_axil_bresp(s_axil_bresp),
+		.s_axil_bvalid(s_axil_bvalid),
+		.s_axil_bready(s_axil_bready),
+		.s_axil_araddr(s_axil_araddr),
+		.s_axil_arprot(s_axil_arprot),
+		.s_axil_arvalid(s_axil_arvalid),
+		.s_axil_arready(s_axil_arready),
+		.s_axil_rdata(s_axil_rdata),
+		.s_axil_rresp(s_axil_rresp),
+		.s_axil_rvalid(s_axil_rvalid),
+		.s_axil_rready(s_axil_rready)
     );
 
     axis_fifo_adapter #(
@@ -86,7 +131,7 @@ module packetgen_64 #(
         .S_KEEP_WIDTH((DATA_WIDTH+7)/8),
 
         .M_DATA_WIDTH(64),
-        .M_KEEP_WIDTH(64/8),
+        .S_KEEP_WIDTH((DATA_WIDTH+7)/8),
 
         .FRAME_FIFO(0)
     ) adapter (

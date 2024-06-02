@@ -32,6 +32,7 @@ module packet_manager #(
         parameter SIZE=64,
         parameter FREQUENCY = 350000000,
 		parameter BANDWIDTH = 1000000000,
+        parameter N_FLOWS = 4,
 
         //Packet contents
         parameter PAYLOAD=8'h1A,
@@ -52,6 +53,15 @@ module packet_manager #(
         input  wire fifo_wr_ready,
         output wire fifo_wr_enable,
 
+        //Configuration input
+        input wire cfg_en,
+        input wire [FLOW_WIDTH-1:0] cfg_id,
+
+        input wire [47:0] cfg_d_mac,
+        input wire [47:0] cfg_s_mac,
+        input wire [15:0] cfg_ethertype,
+        input wire [7 :0] cfg_payload,
+
 		//Command outputs
 		output wire [10:0]  size,
 		output wire [47:0]  d_mac,
@@ -60,16 +70,18 @@ module packet_manager #(
         output wire [7 :0]  payload
 	);
 
-    //Endian Conversion for MAC adresses and ETHERTYPE
+    localparam integer FLOW_WIDTH = (N_FLOWS > 1) ? $clog2(N_FLOWS) : 1;
+
+    //Endian Conversion for MAC adresses and ETHERTYPE parameters
 	localparam [15:0] EC_ETHERTYPE = {ETHERTYPE[7:0], ETHERTYPE[15:8]};
 	localparam [47:0] EC_MAC_D = {MAC_D[7:0], MAC_D[15:8], MAC_D[23:16], MAC_D[31:24], MAC_D[39:32], MAC_D[47:40]};
 	localparam [47:0] EC_MAC_S = {MAC_S[7:0], MAC_S[15:8], MAC_S[23:16], MAC_S[31:24], MAC_S[39:32], MAC_S[47:40]};
 
-    reg [10:0]	size_reg        = SIZE;
-    reg [47:0]	d_mac_reg       = EC_MAC_D;
-    reg [47:0]  s_mac_reg       = EC_MAC_S;
-    reg [15:0]  ethertype_reg   = EC_ETHERTYPE;
-    reg [7 :0]  payload_reg     = PAYLOAD;
+    reg [10:0]	size_reg;
+    reg [47:0]	d_mac_reg;
+    reg [47:0]  s_mac_reg;
+    reg [15:0]  ethertype_reg;
+    reg [7 :0]  payload_reg;
 
     reg request_reg;
     reg ack_reg;
@@ -124,6 +136,21 @@ module packet_manager #(
             end
         end
     end
-    
+
+    // Configuration Logic
+    always @(posedge clk) begin
+        if (rst) begin
+            size_reg        = SIZE;
+            d_mac_reg       = EC_MAC_D;
+            s_mac_reg       = EC_MAC_S;
+            ethertype_reg   = EC_ETHERTYPE;
+            payload_reg     = PAYLOAD;
+        end else if(cfg_en && cfg_id == ID) begin
+            d_mac_reg       = cfg_d_mac;
+            s_mac_reg       = cfg_s_mac;
+            ethertype_reg   = cfg_ethertype;
+            payload_reg     = cfg_payload;
+        end
+    end
 
 endmodule
