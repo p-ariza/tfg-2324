@@ -193,7 +193,11 @@ def test_packetgen(request, n_flows, bandwidths, sizes, d_macs, s_macs, ethertyp
         os.path.join(rtl_dir, f"packet_manager.v"),
         os.path.join(rtl_dir, f"switch_simple_fifo.v"),
         os.path.join(rtl_dir, f"pm_counter.v"),
-        os.path.join(rtl_dir, f"priority_encoder.v")
+        os.path.join(rtl_dir, f"priority_encoder.v"),
+        os.path.join(rtl_dir, f"conf_iface.v"),
+        os.path.join(rtl_dir, f"axil_reg_if.v"),
+        os.path.join(rtl_dir, f"axil_reg_if_wr.v"),
+        os.path.join(rtl_dir, f"axil_reg_if_rd.v")
     ]
 
     parameters = {}
