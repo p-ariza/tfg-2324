@@ -10,6 +10,7 @@ TOPLEVEL 	= $(DUT)
 MODULE 		= test_$(DUT)
 
 VERILOG_SOURCES += ../../rtl/*
+VERILOG_SOURCES += ../../rtl/lib/*
 
 # module parameters
 
