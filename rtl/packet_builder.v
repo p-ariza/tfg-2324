@@ -27,30 +27,30 @@ SOFTWARE.
 `default_nettype none
 
 module packet_builder #(
-	    // Width of AXI stream interface in bits
-		parameter DATA_WIDTH=512
-	)
-	(
-		input wire clk,
-		input wire rst,
+	// Width of AXI stream interface in bits
+	parameter DATA_WIDTH=512
+)
+(
+	input wire clk,
+	input wire rst,
 
-		//FIFO Communication
-		input  wire fifo_rd_valid,
-        output wire fifo_rd_enable,
+	//FIFO Communication
+	input  wire fifo_rd_valid,
+	output wire fifo_rd_enable,
 
-		//Command inputs
-		input wire [10:0]	size,
-		input wire [47:0]	d_mac,
-		input wire [47:0]	s_mac,
-		input wire [15:0]	ethertype,
-        input wire [7 :0]   payload,
+	//Command inputs
+	input wire [10:0]	size,
+	input wire [47:0]	d_mac,
+	input wire [47:0]	s_mac,
+	input wire [15:0]	ethertype,
+	input wire [7 :0]   payload,
 
-		//AXI Stream
-		output wire [DATA_WIDTH-1:0]		axis_tdata,
-		output wire [DATA_WIDTH/8-1:0]		axis_tkeep,
-		output wire 						axis_tvalid,
-		output wire 						axis_tlast
-	);
+	//AXI Stream
+	output wire [DATA_WIDTH-1:0]		axis_tdata,
+	output wire [DATA_WIDTH/8-1:0]		axis_tkeep,
+	output wire 						axis_tvalid,
+	output wire 						axis_tlast
+);
 
 	localparam N_BYTES = DATA_WIDTH/8;
 	integer i;
@@ -252,3 +252,5 @@ module packet_builder #(
     end
 
 endmodule
+
+`resetall

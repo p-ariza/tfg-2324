@@ -161,3 +161,5 @@ module packetgen_64 #(
     );
 
 endmodule
+
+`resetall

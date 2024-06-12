@@ -36,7 +36,8 @@ module pm_counter #(
     
     //Precision
     parameter INTEGRATION_CYCLE=10
-    )(
+)
+(
     input wire clk,
     input wire rst,
     output wire output_sig
@@ -88,3 +89,5 @@ module pm_counter #(
         end
     end
 endmodule
+
+`resetall
