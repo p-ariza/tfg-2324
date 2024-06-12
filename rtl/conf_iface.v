@@ -162,7 +162,7 @@ module conf_iface #(
         if(reg_wr_en) begin
             case (reg_wr_addr)
                 32'h0000: begin
-                    command_reg[7 : 0] <= reg_wr_data[31:24];
+                    //command_reg[7 : 0] <= reg_wr_data[31:24];
                 end
                 32'h0004: begin
                     //Destination MAC field
@@ -204,11 +204,9 @@ module conf_iface #(
 
     // Output logic
     always @(posedge clk) begin
-        if(command_reg[0]) begin
+        if(reg_wr_addr == 32'h0000 && reg_wr_data[24] == 1) begin
             cfg_id_reg <= mngr_id_reg[FLOW_WIDTH-1:0];
             cfg_en_reg <= 1;
-
-            command_reg[0] <= 0;
         end else begin
             cfg_en_reg <= 0;
         end
