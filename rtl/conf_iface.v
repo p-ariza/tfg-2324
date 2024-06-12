@@ -90,19 +90,24 @@ module conf_iface #(
     assign cfg_s_mac        = s_mac_reg;
     assign cfg_ethertype    = ethertype_reg;
     assign cfg_payload      = payload_reg;
+
+    /*
+    * AXI Lite Registe Interface
+    */
+    wire [32-1:0]    reg_wr_addr;
+    wire [32-1:0]    reg_wr_data;
+    wire [4-1:0]     reg_wr_strb;
+    wire             reg_wr_en;
+    wire             reg_wr_wait;
+    wire             reg_wr_ack;
+    wire [32-1:0]    reg_rd_addr;
+    wire             reg_rd_en;
+    wire [32-1:0]    reg_rd_data;
+    wire             reg_rd_wait;
+    wire             reg_rd_ack;
     
-    // Interface registers
-    reg [32-1:0]    reg_wr_addr;
-    reg [32-1:0]    reg_wr_data;
-    reg [4-1:0]     reg_wr_strb;
-    reg             reg_wr_en;
-    reg             reg_wr_wait;
-    reg             reg_wr_ack;
-    reg [32-1:0]    reg_rd_addr;
-    reg             reg_rd_en;
-    reg [32-1:0]    reg_rd_data;
-    reg             reg_rd_wait;
-    reg             reg_rd_ack;
+    reg    reg_wr_ack_reg;
+    assign reg_wr_ack   = reg_wr_ack_reg;
 
     axil_reg_if #(
         .DATA_WIDTH(32),
@@ -191,9 +196,9 @@ module conf_iface #(
                     mngr_id_reg[ 7: 0] <= reg_wr_data[31:24];
                 end
             endcase
-            reg_wr_ack <= 1;
+            reg_wr_ack_reg <= 1;
         end else begin
-            reg_wr_ack <= 0;
+            reg_wr_ack_reg <= 0;
         end
     end
 
