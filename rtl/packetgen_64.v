@@ -48,7 +48,7 @@ module packetgen_64 #(
     // Ethertype field
     parameter ETHERTYPES = {16'h0800, 16'h0800, 16'h0800, 16'h0800},
     // Frame payload pattern
-    parameter PAYLOADS = {8'hAA, 8'hBB, 8'hCC, 8'hDD}
+    parameter PAYLOADS = {8'hAA, 8'hBB, 8'hCC, 8'hDD},
 
     // AXI adapter FIFO depth
     parameter DEPTH = 4096
@@ -58,8 +58,8 @@ module packetgen_64 #(
     input wire rst,
     //AXI Stream
     
-    output wire [63:0]	axis_tdata,
-    output wire [7:0]	axis_tkeep,
+    output wire [DATA_WIDTH-1:0]	    axis_tdata,
+    output wire [(DATA_WIDTH/8)-1:0]	axis_tkeep,
     output wire 		axis_tvalid,
     //input  wire		  axis_tready,
     output wire 		axis_tlast,
@@ -88,14 +88,14 @@ module packetgen_64 #(
     input  wire             s_axil_rready
 );
 
-    wire [DATA_WIDTH-1:0]   pg_axis_tdata;
-    wire [DATA_WIDTH/8-1:0] pg_axis_tkeep;
-    wire                    pg_axis_tvalid;
-    wire                    pg_axis_tready;
-    wire                    pg_axis_tlast;
+    wire [511:0]    pg_axis_tdata;
+    wire [63:0]     pg_axis_tkeep;
+    wire            pg_axis_tvalid;
+    wire            pg_axis_tready;
+    wire            pg_axis_tlast;
 
     packetgen #(
-        .DATA_WIDTH(DATA_WIDTH),
+        .DATA_WIDTH(512),
         .FREQUENCY(FREQUENCY),
         .N_FLOWS(N_FLOWS),
         .BANDWIDTHS(BANDWIDTHS),
@@ -136,11 +136,11 @@ module packetgen_64 #(
 
     axis_fifo_adapter #(
         .DEPTH(DEPTH),
-        .S_DATA_WIDTH(DATA_WIDTH),
-        .S_KEEP_WIDTH((DATA_WIDTH+7)/8),
+        .S_DATA_WIDTH(512),
+        .S_KEEP_WIDTH(64),
 
-        .M_DATA_WIDTH(64),
-        .S_KEEP_WIDTH((DATA_WIDTH+7)/8),
+        .M_DATA_WIDTH(DATA_WIDTH),
+        .M_KEEP_WIDTH((DATA_WIDTH+7)/8),
 
         .FRAME_FIFO(0)
     ) adapter (
@@ -156,7 +156,7 @@ module packetgen_64 #(
         .m_axis_tdata(axis_tdata),
         .m_axis_tkeep(axis_tkeep),
         .m_axis_tvalid(axis_tvalid),
-        .m_axis_tready(1),
+        .m_axis_tready(1'b1),
         .m_axis_tlast(axis_tlast)
     );
 
