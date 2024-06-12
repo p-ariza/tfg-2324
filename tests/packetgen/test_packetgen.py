@@ -75,6 +75,7 @@ async def run_bandwidth_test(dut):
 
     sizes = split_int_parameter("PARAM_SIZES",11,n_flows)
     bandwidths = split_int_parameter("PARAM_BANDWIDTHS",32,n_flows)
+    bandwidths = [bw * pow(10,3) for bw in bandwidths]
     d_macs = split_string_parameter("PARAM_D_MACS",12,n_flows)
     s_macs = split_string_parameter("PARAM_S_MACS",12,n_flows)
     ethertypes = split_string_parameter("PARAM_ETHERTYPES",4,n_flows)
@@ -86,7 +87,7 @@ async def run_bandwidth_test(dut):
     for f in range(n_flows):
         axi_frames[f] = AxiStreamFrame(bytearray.fromhex(d_macs[f] + s_macs[f] + ethertypes[f] + payloads[f]*(sizes[f]-14)), [1]*sizes[f])
 
-    period = round(1/(frequency/pow(10,9)),3)
+    period = round(1/(frequency/pow(10,6)),3)
 
     dut._log.info("Clock period: %f", period)
 
@@ -133,47 +134,47 @@ rtl_dir = os.path.abspath(os.path.join(tests_dir, '..', '..', 'rtl'))
 
 @pytest.mark.parametrize(("n_flows", "bandwidths", "sizes", "d_macs", "s_macs", "ethertypes", "payloads"), 
         [
-        (1, (pow(10,9),), (64,),
+        (1, (pow(10,6),), (64,),
           ("ABCDEF000001",),
           ("BEEFBEEF0001",),
           ("0800",), ("AA",)
         ),
-        (1, (pow(10,9),), (1522,),
+        (1, (pow(10,6),), (1522,),
           ("ABCDEF000001",),
           ("BEEFBEEF0001",),
           ("0800",), ("AA",)
         ),
-        (1, (10*pow(10,9),), (64,),
+        (1, (10*pow(10,6),), (64,),
           ("ABCDEF000001",),
           ("BEEFBEEF0001",),
           ("0800",), ("AA",)
         ),
-        (1, (10*pow(10,9),), (1522,),
+        (1, (10*pow(10,6),), (1522,),
           ("ABCDEF000001",),
           ("BEEFBEEF0001",),
           ("0800",), ("AA",)
         ),
-        (4, (pow(10,9), 2*pow(10,9), 3*pow(10,9), 4*pow(10,9)), (64,128,256,512),
+        (4, (pow(10,6), 2*pow(10,6), 3*pow(10,6), 4*pow(10,6)), (64,128,256,512),
           ("ABCDEF000001", "ABCDEF000002", "ABCDEF000001", "ABCDEF000004"),
           ("BEEFBEEF0001", "BEEFBEEF0002", "BEEFBEEF0001", "BEEFBEEF0004"),
           ("0800",)*4, ("AA", "BB", "CC", "DD")
         ),
-        (5, (pow(10,9),)*5, tuple(2**i for i in range(6,11)),
+        (5, (pow(10,6),)*5, tuple(2**i for i in range(6,11)),
           ("ABCDEF000001",)*5,
           ("BEEFBEEF0001",)*5,
           ("0800",)* 5, tuple(format(i, '02x') for i in range(6,11))
         ),
-        (15, (2*pow(10,9),)*15, tuple(100*i for i in range(1,16)),
+        (15, (2*pow(10,6),)*15, tuple(100*i for i in range(1,16)),
           ("ABCDEF000001",)*15,
           ("BEEFBEEF0001",)*15,
           ("0800",)* 15, tuple(format(i, '02x') for i in range(1,16))
         ),
-        (100, (pow(10,9),)*100, (64,)*100,
+        (100, (pow(10,6),)*100, (64,)*100,
           ("ABCDEF000001",)*100,
           ("BEEFBEEF0001",)*100,
           ("0800",)* 100, tuple(format(i, '02x') for i in range(1,101))
         ),
-        (100, (pow(10,9),)*100, (300,)*100,
+        (100, (pow(10,6),)*100, (300,)*100,
           ("ABCDEF000001",)*100,
           ("BEEFBEEF0001",)*100,
           ("0800",)* 100, tuple(format(i, '02x') for i in range(1,101))
