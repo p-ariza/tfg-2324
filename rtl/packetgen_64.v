@@ -60,9 +60,9 @@ module packetgen_64 #(
     
     output wire [DATA_WIDTH-1:0]	    axis_tdata,
     output wire [(DATA_WIDTH/8)-1:0]	axis_tkeep,
-    output wire 		axis_tvalid,
-    //input  wire		  axis_tready,
-    output wire 		axis_tlast,
+    output wire                         axis_tvalid,
+    input  wire	                        axis_tready,
+    output wire                         axis_tlast,
 
     /*
     * Flow Configuration AXI lite slave interface
@@ -156,7 +156,7 @@ module packetgen_64 #(
         .m_axis_tdata(axis_tdata),
         .m_axis_tkeep(axis_tkeep),
         .m_axis_tvalid(axis_tvalid),
-        .m_axis_tready(1'b1),
+        .m_axis_tready(axis_tready),
         .m_axis_tlast(axis_tlast)
     );
 
