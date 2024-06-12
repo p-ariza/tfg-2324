@@ -29,9 +29,12 @@ SOFTWARE.
 module packet_manager #(
         //Flow characteristics
         parameter ID = 0,
+        // MAC frame size in Bytes
         parameter SIZE=64,
-        parameter FREQUENCY = 350000000,
-		parameter BANDWIDTH = 1000000000,
+        // clk signal frecuency in Khz
+        parameter FREQUENCY = 350000,
+        // Bandwith in Kb/s
+        parameter BANDWIDTH = 1000000,
         parameter N_FLOWS = 4,
 
         //Packet contents

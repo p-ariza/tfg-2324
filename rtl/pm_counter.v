@@ -28,10 +28,13 @@ SOFTWARE.
 
 module pm_counter #(
     // Flow characteristics
-    // Units: Bytes, KHz & Kb/s
+    // MAC frame size in Bytes
     parameter SIZE=64,
+    // clk signal frecuency in Khz
     parameter FREQUENCY = 350000,
+    // Bandwith in Kb/s
 	parameter BANDWIDTH = 1000000,
+    
     //Precision
     parameter INTEGRATION_CYCLE=10
     )(

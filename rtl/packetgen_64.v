@@ -28,11 +28,14 @@ SOFTWARE.
 
 module packetgen_64 #(
     parameter DATA_WIDTH=512,
-    parameter FREQUENCY = 350000000,
+    // clk signal frecuency in Khz
+    parameter FREQUENCY = 350000,
     parameter N_FLOWS = 4,
 
     //Flow characteristics
-    parameter BANDWIDTHS = {32'd1000000000, 32'd1000000000, 32'd1000000000, 32'd1000000000},
+    // Bandwiths in Kb/s
+    parameter BANDWIDTHS = {32'd1000000, 32'd1000000, 32'd1000000, 32'd1000000},
+    // MAC frame sizes in Bytes
     parameter SIZES = {11'd192, 11'd192, 11'd192, 11'd192},
 
     //Packet contents
