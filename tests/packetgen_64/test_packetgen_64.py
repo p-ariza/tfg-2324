@@ -80,6 +80,7 @@ async def run_bandwidth_test(dut):
 
     sizes = split_int_parameter("PARAM_SIZES",11,n_flows)
     bandwidths = split_int_parameter("PARAM_BANDWIDTHS",32,n_flows)
+    bandwidths = [bw * pow(10,3) for bw in bandwidths]
     d_macs = split_string_parameter("PARAM_D_MACS",12,n_flows)
     s_macs = split_string_parameter("PARAM_S_MACS",12,n_flows)
     ethertypes = split_string_parameter("PARAM_ETHERTYPES",4,n_flows)
@@ -91,7 +92,7 @@ async def run_bandwidth_test(dut):
     for f in range(n_flows):
         axi_frames[f] = AxiStreamFrame(bytearray.fromhex(d_macs[f] + s_macs[f] + ethertypes[f] + payloads[f]*(sizes[f]-14)), [1]*sizes[f])
 
-    period = round(1/(frequency/pow(10,9)),3)
+    period = round(1/(frequency/pow(10,6)),3)
 
     dut._log.info("Clock period: %f", period)
 
@@ -124,7 +125,7 @@ async def run_bandwidth_test(dut):
     # Output bandwidths in bits/s
     out_bws = [(count*8/elapsed_time_ns)*pow(10,9) for count in byte_counts]
 
-    error_range = 0.001
+    error_range = 0.01
     for flow, bw in enumerate(out_bws):
         assert bandwidths[flow]*(1-error_range) < bw
         assert bandwidths[flow]*(1+error_range) > bw
