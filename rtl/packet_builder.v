@@ -27,6 +27,7 @@ SOFTWARE.
 `default_nettype none
 
 module packet_builder #(
+	    // Width of AXI stream interface in bits
 		parameter DATA_WIDTH=512
 	)
 	(

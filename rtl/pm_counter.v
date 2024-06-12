@@ -27,7 +27,6 @@ SOFTWARE.
 `default_nettype none
 
 module pm_counter #(
-    // Flow characteristics
     // MAC frame size in Bytes
     parameter SIZE=64,
     // clk signal frecuency in Khz
