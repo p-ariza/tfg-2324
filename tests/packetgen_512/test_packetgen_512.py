@@ -181,9 +181,9 @@ axis_lib_dir = os.path.abspath(os.path.join(tests_dir, '..', '..', 'lib', 'veril
         )
         ]
     )
-def test_packetgen(request, n_flows, bandwidths, sizes, d_macs, s_macs, ethertypes, payloads):
+def test_packetgen_512(request, n_flows, bandwidths, sizes, d_macs, s_macs, ethertypes, payloads):
 
-    dut = "packetgen"
+    dut = "packetgen_512"
     module = os.path.splitext(os.path.basename(__file__))[0]
     toplevel = dut
 
