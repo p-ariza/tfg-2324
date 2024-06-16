@@ -5,7 +5,7 @@ SIM ?= icarus
 WAVES ?= 1
 TOPLEVEL_LANG ?= verilog
 
-DUT			= packetgen_64
+DUT			= packetgen
 TOPLEVEL 	= $(DUT)
 MODULE 		= test_$(DUT)
 

@@ -26,7 +26,7 @@ SOFTWARE.
 `timescale 1ns / 10fs
 `default_nettype none
 
-module packetgen_64 #(
+module packetgen #(
     // Width of AXI stream interface in bits
     parameter DATA_WIDTH=512,
     // clk signal frecuency in Khz
