@@ -73,6 +73,7 @@ async def test_input_fields(dut):
 
 tests_dir = os.path.dirname(__file__)
 rtl_dir = os.path.abspath(os.path.join(tests_dir, '..', '..', 'rtl'))
+axi_lib_dir = os.path.abspath(os.path.join(tests_dir, '..', '..', 'lib', 'verilog-axi', 'rtl'))
 
 @pytest.mark.parametrize("n_flows", [1, 4, 16, 64, 256])
 def test_packetgen(request, n_flows):
@@ -83,9 +84,9 @@ def test_packetgen(request, n_flows):
 
     verilog_sources = [
         os.path.join(rtl_dir, f"{dut}.v"),
-        os.path.join(rtl_dir, f"axil_reg_if.v"),
-        os.path.join(rtl_dir, f"axil_reg_if_wr.v"),
-        os.path.join(rtl_dir, f"axil_reg_if_rd.v")
+        os.path.join(axi_lib_dir, f"axil_reg_if.v"),
+        os.path.join(axi_lib_dir, f"axil_reg_if_wr.v"),
+        os.path.join(axi_lib_dir, f"axil_reg_if_rd.v")
     ]
 
     parameters = {}

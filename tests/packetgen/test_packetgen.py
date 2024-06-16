@@ -129,8 +129,8 @@ async def run_bandwidth_test(dut):
 
 tests_dir = os.path.dirname(__file__)
 rtl_dir = os.path.abspath(os.path.join(tests_dir, '..', '..', 'rtl'))
-
-
+axi_lib_dir = os.path.abspath(os.path.join(tests_dir, '..', '..', 'lib', 'verilog-axi', 'rtl'))
+axis_lib_dir = os.path.abspath(os.path.join(tests_dir, '..', '..', 'lib', 'verilog-axis', 'rtl'))
 
 @pytest.mark.parametrize(("n_flows", "bandwidths", "sizes", "d_macs", "s_macs", "ethertypes", "payloads"), 
         [
@@ -193,12 +193,12 @@ def test_packetgen(request, n_flows, bandwidths, sizes, d_macs, s_macs, ethertyp
         os.path.join(rtl_dir, f"packet_manager.v"),
         os.path.join(rtl_dir, f"pm_counter.v"),
         os.path.join(rtl_dir, f"conf_iface.v"),
-        os.path.join(rtl_dir, f"lib/arbiter.v"),
-        os.path.join(rtl_dir, f"lib/switch_simple_fifo.v"),
-        os.path.join(rtl_dir, f"lib/priority_encoder.v"),
-        os.path.join(rtl_dir, f"lib/axil_reg_if.v"),
-        os.path.join(rtl_dir, f"lib/axil_reg_if_wr.v"),
-        os.path.join(rtl_dir, f"lib/axil_reg_if_rd.v")
+        os.path.join(rtl_dir, f"switch_simple_fifo.v"),
+        os.path.join(axis_lib_dir, f"arbiter.v"),
+        os.path.join(axis_lib_dir, f"priority_encoder.v"),
+        os.path.join(axi_lib_dir, f"axil_reg_if.v"),
+        os.path.join(axi_lib_dir, f"axil_reg_if_wr.v"),
+        os.path.join(axi_lib_dir, f"axil_reg_if_rd.v")
     ]
 
     parameters = {}

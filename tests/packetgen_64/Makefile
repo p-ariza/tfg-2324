@@ -10,7 +10,14 @@ TOPLEVEL 	= $(DUT)
 MODULE 		= test_$(DUT)
 
 VERILOG_SOURCES += ../../rtl/*
-VERILOG_SOURCES += ../../rtl/lib/*
+VERILOG_SOURCES += ../../lib/verilog-axis/rtl/axis_fifo_adapter.v
+VERILOG_SOURCES += ../../lib/verilog-axis/rtl/axis_fifo.v
+VERILOG_SOURCES += ../../lib/verilog-axis/rtl/axis_adapter.v
+VERILOG_SOURCES += ../../lib/verilog-axis/rtl/arbiter.v
+VERILOG_SOURCES += ../../lib/verilog-axis/rtl/priority_encoder.v
+VERILOG_SOURCES += ../../lib/verilog-axi/rtl/axil_reg_if.v
+VERILOG_SOURCES += ../../lib/verilog-axi/rtl/axil_reg_if_rd.v
+VERILOG_SOURCES += ../../lib/verilog-axi/rtl/axil_reg_if_wr.v
 
 # module parameters
 
