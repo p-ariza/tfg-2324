@@ -10,6 +10,12 @@ It also includes `cocotb` testbenches utilizing [cocotbext-axi](https://github.c
 
 This repository has been developed for my final project for UGR's Computer Engineering Degree.
 
+## Running testbenches
+
+This project's testbenches have been run with the dependency management tool `poetry`. To install required dependencies run `poetry install` on this repository main directory. After dependencies are we can enter poetry's virtual environment running `poetry shell`.
+
+Finally to run a given test, for example `packetgen`'s, use `make` to run cocotb's simple tests and `pytest -o log_cli=True test_packetgen.py` to run pytest's set of tests.
+
 ## Documentation
 
 ### `packetgen.v` module

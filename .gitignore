@@ -1,0 +1,5 @@
+poetry.lock
+
+tests/*/results.xml
+tests/*/__pycache__
+tests/*/sim_build
