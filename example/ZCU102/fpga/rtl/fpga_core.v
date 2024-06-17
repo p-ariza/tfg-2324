@@ -294,12 +294,12 @@ eth_mac_10g_fifo_inst (
 );
 
 // packet generator
-packetgen_64 #(
+packetgen #(
     .DATA_WIDTH(512),
     .FREQUENCY(156250),
     .N_FLOWS(2)
 )
-packetgen_64_inst(
+packetgen_inst(
     .clk(clk),
     .rst(rst),
     .axis_tdata(tx_axis_tdata),
