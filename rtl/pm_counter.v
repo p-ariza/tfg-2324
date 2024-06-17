@@ -52,7 +52,7 @@ module pm_counter #(
 	localparam NCYCLES_REMAINDER = NCYCLES_SCALED - (N_CYCLES * INTEGRATION_CYCLE);
 
     //Data width for counters
-    localparam CYCLE_COUNT_WIDTH = !(N_CYCLES & (N_CYCLES-1)) ? $clog2(N_CYCLES)+1 : $clog2(N_CYCLES);
+    localparam CYCLE_COUNT_WIDTH = !((N_CYCLES+1) & N_CYCLES) ? $clog2(N_CYCLES)+1 : $clog2(N_CYCLES+1);
     localparam PACKET_COUNT_WIDTH = !(INTEGRATION_CYCLE & (INTEGRATION_CYCLE-1)) ? $clog2(INTEGRATION_CYCLE)+1 : $clog2(INTEGRATION_CYCLE);
 
     reg [CYCLE_COUNT_WIDTH-1:0] cycle_count;
@@ -67,25 +67,26 @@ module pm_counter #(
             cycle_count <= 0;
             output_sig_reg <= 1;
             packet_count <= 0;
-        end else if ((cycle_count == N_CYCLES) && packet_count < NCYCLES_REMAINDER) begin
-            cycle_count <= 0;
-            output_sig_reg <= 1;
-            if (packet_count < INTEGRATION_CYCLE) begin
-                packet_count <= packet_count + 1;
-            end else begin
-                packet_count <= 0;
-            end
-        end else if ((cycle_count == N_CYCLES-1) && packet_count >= NCYCLES_REMAINDER) begin
-            cycle_count <= 0;
-            output_sig_reg <= 1;
-            if (packet_count == INTEGRATION_CYCLE-1) begin
-                packet_count <= 0;
-            end else begin
-                packet_count <= packet_count + 1;
-            end
         end else begin
-            cycle_count <= cycle_count + 1;
-            output_sig_reg <= 0;
+            //Packet counter
+            if(output_sig_reg) begin
+                if (packet_count < INTEGRATION_CYCLE) begin
+                    packet_count <= packet_count + 1;
+                end else begin
+                    packet_count <= 0;
+                end
+            end
+            //Cycle counter
+            if ((cycle_count == N_CYCLES+1) && packet_count < NCYCLES_REMAINDER) begin
+                cycle_count <= 0;
+                output_sig_reg <= 1;   
+            end else if ((cycle_count == N_CYCLES) && packet_count >= NCYCLES_REMAINDER) begin
+                cycle_count <= 0;
+                output_sig_reg <= 1;
+            end else begin
+                cycle_count <= cycle_count + 1;
+                output_sig_reg <= 0;
+            end
         end
     end
 endmodule
