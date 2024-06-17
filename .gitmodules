@@ -7,3 +7,6 @@
 [submodule "lib/verilog-ethernet"]
 	path = lib/verilog-ethernet
 	url = https://github.com/alexforencich/verilog-ethernet.git
+[submodule "lib/xfcp"]
+	path = lib/xfcp
+	url = https://github.com/alexforencich/xfcp
