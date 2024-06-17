@@ -1,5 +1,18 @@
 poetry.lock
 
+# Ignore test results files
 tests/*/results.xml
 tests/*/__pycache__
 tests/*/sim_build
+
+# Ignore example build files
+example/*/fpga/fpga/fpga.cache/*
+example/*/fpga/fpga/fpga.gen/*
+example/*/fpga/fpga/fpga.hw/*
+example/*/fpga/fpga/fpga.runs/*
+example/*/fpga/fpga/fpga.srcs/*
+example/*/fpga/fpga/create_project.tcl
+example/*/fpga/fpga/defines.v
+example/*/fpga/fpga/fpga.xpr
+example/*/fpga/fpga/run_synth.tcl
+example/*/fpga/fpga/update_config.tcl
