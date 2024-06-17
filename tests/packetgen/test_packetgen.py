@@ -127,5 +127,6 @@ async def run_bandwidth_test(dut):
 
     error_range = 0.01
     for flow, bw in enumerate(out_bws):
+        dut._log.info("Average bandwidth: %f", bw)
         assert bandwidths[flow]*(1-error_range) < bw
         assert bandwidths[flow]*(1+error_range) > bw
