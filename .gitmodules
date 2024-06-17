@@ -10,3 +10,6 @@
 [submodule "lib/xfcp"]
 	path = lib/xfcp
 	url = https://github.com/alexforencich/xfcp
+[submodule "lib/verilog-uart"]
+	path = lib/verilog-uart
+	url = https://github.com/alexforencich/verilog-uart
