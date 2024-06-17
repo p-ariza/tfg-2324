@@ -16,3 +16,9 @@ example/*/fpga/fpga/defines.v
 example/*/fpga/fpga/fpga.xpr
 example/*/fpga/fpga/run_synth.tcl
 example/*/fpga/fpga/update_config.tcl
+example/*/fpga/fpga/fpga_utilization_hierarchical.rpt
+example/*/fpga/fpga/fpga_utilization.rpt
+example/*/fpga/fpga/fpga.bit
+example/*/fpga/fpga/generate_bit.tcl
+example/*/fpga/fpga/run_impl.tcl
+example/*/fpga/fpga/rev/fpga_rev100.bit
