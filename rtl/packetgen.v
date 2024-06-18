@@ -95,7 +95,7 @@ module packetgen #(
     wire            pg_axis_tlast;
 
     packetgen_512 #(
-        .DATA_WIDTH(512),
+        .DATA_WIDTH(64),
         .FREQUENCY(FREQUENCY),
         .N_FLOWS(N_FLOWS),
         .BANDWIDTHS(BANDWIDTHS),
