@@ -295,7 +295,7 @@ eth_mac_10g_fifo_inst (
 
 // packet generator
 packetgen #(
-    .DATA_WIDTH(512),
+    .DATA_WIDTH(64),
     .FREQUENCY(156250),
     .N_FLOWS(2)
 )
