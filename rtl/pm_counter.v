@@ -77,10 +77,10 @@ module pm_counter #(
                 end
             end
             //Cycle counter
-            if ((cycle_count == N_CYCLES+1) && packet_count < NCYCLES_REMAINDER) begin
+            if ((cycle_count == N_CYCLES) && packet_count < NCYCLES_REMAINDER) begin
                 cycle_count <= 0;
                 output_sig_reg <= 1;   
-            end else if ((cycle_count == N_CYCLES) && packet_count >= NCYCLES_REMAINDER) begin
+            end else if ((cycle_count == N_CYCLES-1) && packet_count >= NCYCLES_REMAINDER) begin
                 cycle_count <= 0;
                 output_sig_reg <= 1;
             end else begin
