@@ -22,3 +22,7 @@ example/*/fpga/fpga/fpga.bit
 example/*/fpga/fpga/generate_bit.tcl
 example/*/fpga/fpga/run_impl.tcl
 example/*/fpga/fpga/rev/fpga_rev*.bit
+
+# Ignore vivado files
+.Xil
+vivado_pid*
