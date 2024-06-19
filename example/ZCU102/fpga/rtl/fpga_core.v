@@ -204,19 +204,19 @@ xfcp_mod_axil_inst (
 );
 
 // AXI between MAC and Ethernet modules
-(* mark_debug = "true" *) wire [63:0] rx_axis_tdata;
-(* mark_debug = "true" *) wire [7:0] rx_axis_tkeep;
-(* mark_debug = "true" *) wire rx_axis_tvalid;
-(* mark_debug = "true" *) wire rx_axis_tready;
-(* mark_debug = "true" *) wire rx_axis_tlast;
-(* mark_debug = "true" *) wire rx_axis_tuser;
+wire [63:0] rx_axis_tdata;
+wire [7:0] rx_axis_tkeep;
+wire rx_axis_tvalid;
+wire rx_axis_tready;
+wire rx_axis_tlast;
+wire rx_axis_tuser;
 
-(* mark_debug = "true" *) wire [63:0] tx_axis_tdata;
-(* mark_debug = "true" *) wire [7:0] tx_axis_tkeep;
-(* mark_debug = "true" *) wire tx_axis_tvalid;
-(* mark_debug = "true" *) wire tx_axis_tready;
-(* mark_debug = "true" *) wire tx_axis_tlast;
-(* mark_debug = "true" *) wire tx_axis_tuser;
+wire [63:0] tx_axis_tdata;
+wire [7:0] tx_axis_tkeep;
+wire tx_axis_tvalid;
+wire tx_axis_tready;
+wire tx_axis_tlast;
+wire tx_axis_tuser;
 
 
 // Place first payload byte onto LEDs
